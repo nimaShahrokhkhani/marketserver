@@ -6,9 +6,13 @@ router.post('/', function(request, response, next) {
     let username = request.body.username;
     let password = request.body.password;
     db.find(db.COLLECTIONS.USERS,{username: username, password: password}).then((users) => {
-        response.status(200).json(users[0]);
+        if (users.length !== 0) {
+            response.status(200).json();
+        } else {
+            response.status(409).send("Username not found");
+        }
     }).catch(() => {
-        response.status(409).send("Username not found");
+        response.status(409).send();
     });
 });
 
