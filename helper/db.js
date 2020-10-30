@@ -4,6 +4,7 @@ var dbo = undefined;
 const COLLECTIONS = {
     USERS: 'users',
     COMPANIES: 'companies',
+    PRODUCT_CATEGORIES: 'productCategories',
     PRODUCTS: 'products'
 };
 
@@ -27,4 +28,49 @@ function find(collection, query) {
     });
 }
 
-module.exports = {COLLECTIONS, find};
+function insert(collection, dataObject) {
+    return new Promise((resolve, reject) => {
+        if (dbo) {
+            dbo.createCollection(collection, function (err, res) {
+                dbo.collection(collection).insertOne(dataObject, function(err, res) {
+                    if (err) reject(err);
+                    resolve(res);
+                });
+            });
+        } else {
+            reject();
+        }
+    });
+}
+
+function update(collection, updateQuery, newValues) {
+    return new Promise((resolve, reject) => {
+        if (dbo) {
+            dbo.createCollection(collection, function (err, res) {
+                dbo.collection(collection).updateOne(updateQuery, newValues, function(err, res) {
+                    if (err) reject(err);
+                    resolve(res);
+                });
+            });
+        } else {
+            reject();
+        }
+    });
+}
+
+function deleteFunction(collection, deleteQuery) {
+    return new Promise((resolve, reject) => {
+        if (dbo) {
+            dbo.createCollection(collection, function (err, res) {
+                dbo.collection(collection).deleteOne(deleteQuery, function(err, obj) {
+                    if (err) reject(err);
+                    resolve(res);
+                });
+            });
+        } else {
+            reject();
+        }
+    });
+}
+
+module.exports = {COLLECTIONS, find, insert, update, deleteFunction};
