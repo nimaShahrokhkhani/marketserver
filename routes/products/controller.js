@@ -44,6 +44,34 @@ router.get('/list', function (request, response, next) {
     });
 });
 
+router.get('/newCollection', function (request, response, next) {
+    let filterData = {
+        serialNumber: request.query.serialNumber,
+        name: request.query.name,
+        company: request.query.company === 'admin' ? undefined : request.query.company,
+        description: request.query.description,
+        image: request.query.image,
+        price: request.query.price,
+        discount: request.query.discount,
+        type: request.query.type,
+        dateModify: request.query.dateModify,
+        comments: request.query.comments,
+        brand: request.query.brand,
+        colors: request.query.colors,
+        totalCount: request.query.totalCount,
+        existCount: request.query.existCount,
+        rate: request.query.rate,
+        properties: request.query.properties,
+        isBestSeller: request.query.isBestSeller
+    };
+    Object.keys(filterData).forEach(key => filterData[key] === undefined && delete filterData[key]);
+    db.findNewest(db.COLLECTIONS.PRODUCTS, filterData).then((products) => {
+        response.status(200).json(products);
+    }).catch(() => {
+        response.status(409).send("Product not found");
+    });
+});
+
 router.get('/download', function (req, res) {
 
     var file = __dirname + '/uploads/' + req.query.fileName;
@@ -91,27 +119,29 @@ router.post('/edit', upload.single('file'), function (request, response, next) {
         serialNumber: request.body.serialNumber
     };
     request.body.image = request.file ? request.file.filename : undefined;
-    let newValues = {
-        $set: {
-            serialNumber: request.body.serialNumber,
-            name: request.body.name,
-            company: request.body.company,
-            description: request.body.description,
-            price: request.body.price,
-            discount: request.body.discount,
-            type: request.body.type,
-            dateModify: request.body.dateModify,
-            comments: request.body.comments,
-            brand: request.body.brand,
-            colors: request.body.colors,
-            totalCount: request.body.totalCount,
-            existCount: request.body.existCount,
-            rate: request.body.rate,
-            properties: request.body.properties,
-            isBestSeller: request.body.isBestSeller
-        }
+    let newValuesObject = {
+        serialNumber: request.body.serialNumber,
+        name: request.body.name,
+        company: request.body.company,
+        description: request.body.description,
+        price: request.body.price,
+        discount: request.body.discount,
+        type: request.body.type,
+        dateModify: request.body.dateModify,
+        comments: request.body.comments,
+        brand: request.body.brand,
+        colors: request.body.colors,
+        totalCount: request.body.totalCount,
+        existCount: request.body.existCount,
+        rate: request.body.rate,
+        properties: request.body.properties,
+        image: request.body.image,
+        isBestSeller: request.body.isBestSeller
     };
-    Object.keys(newValues).forEach(key => newValues[key] === undefined && delete newValues[key]);
+    Object.keys(newValuesObject).forEach(key => newValuesObject[key] === undefined && delete newValuesObject[key]);
+    let newValues = {
+        $set: newValuesObject
+    };
     db.update(db.COLLECTIONS.PRODUCTS, query, newValues).then((products) => {
         response.status(200).json(products);
     }).catch(() => {

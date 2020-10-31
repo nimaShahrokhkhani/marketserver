@@ -28,6 +28,21 @@ function find(collection, query) {
     });
 }
 
+function findNewest(collection, query) {
+    return new Promise((resolve, reject) => {
+        if (dbo) {
+            dbo.createCollection(collection, function (err, res) {
+                dbo.collection(collection).find(query).sort({"dateModify": -1}).limit(3).toArray(function (err, result) {
+                    if (err) reject(err);
+                    resolve(result);
+                });
+            });
+        } else {
+            reject();
+        }
+    });
+}
+
 function insert(collection, dataObject) {
     return new Promise((resolve, reject) => {
         if (dbo) {
@@ -73,4 +88,4 @@ function deleteFunction(collection, deleteQuery) {
     });
 }
 
-module.exports = {COLLECTIONS, find, insert, update, deleteFunction};
+module.exports = {COLLECTIONS, find, findNewest, insert, update, deleteFunction};
