@@ -23,6 +23,7 @@ router.get('/list', function(request, response, next) {
         moreInformation: request.query.moreInformation,
         image: request.query.image,
         isCandidate: request.query.isCandidate,
+        subTypes: request.query.subTypes,
     };
     Object.keys(filterData).forEach(key => filterData[key] === undefined && delete filterData[key]);
     db.find(db.COLLECTIONS.PRODUCT_CATEGORIES, filterData).then((productCategories) => {
@@ -55,6 +56,7 @@ router.post('/insert', upload.single('file'), function(request, response, next) 
         moreInformation: request.body.moreInformation,
         image: request.body.image,
         isCandidate: request.body.isCandidate,
+        subTypes: request.body.subTypes,
     };
 
 
@@ -76,6 +78,7 @@ router.post('/edit', upload.single('file'), function(request, response, next) {
         moreInformation: request.body.moreInformation,
         image: request.body.image,
         isCandidate: request.body.isCandidate,
+        subTypes: request.body.subTypes,
     };
     Object.keys(newValuesObject).forEach(key => newValuesObject[key] === undefined && delete newValuesObject[key]);
     let newValues = {
