@@ -16,6 +16,17 @@ var storage = multer.diskStorage({
 });
 var upload = multer({storage: storage});
 
+router.get('/search', function (request, response, next) {
+    let filterData = {
+        name: { "$regex": request.query.name, "$options": "i" }
+    };
+    db.find(db.COLLECTIONS.PRODUCTS, filterData).then((products) => {
+        response.status(200).json(products);
+    }).catch(() => {
+        response.status(409).send("Product not found");
+    });
+});
+
 router.get('/list', function (request, response, next) {
     let filterData = {
         serialNumber: request.query.serialNumber,
