@@ -20,5 +20,6 @@ router.use('/products', require('./products'));
 router.use('/companies', require('./companies'));
 router.use('/highlight', require('./highlight'));
 router.use('/events', require('./events'));
+router.use('/brands', require('./brands'));
 
 module.exports = router;

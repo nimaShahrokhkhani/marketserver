@@ -15,7 +15,7 @@ router.get('/list', function (request, response, next) {
         identityNumber: request.body.identityNumber,
     };
     Object.keys(filterData).forEach(key => filterData[key] === undefined && delete filterData[key]);
-    db.find(db.COLLECTIONS.USERS, query).then((users) => {
+    db.find(db.COLLECTIONS.USERS, filterData).then((users) => {
         response.status(200).json(users);
     }).catch(() => {
         response.status(409).send("Username not found");

@@ -18,8 +18,11 @@ var upload = multer({storage: storage});
 
 router.get('/search', function (request, response, next) {
     let filterData = {
-        name: { "$regex": request.query.name, "$options": "i" }
+        name: request.query.name ? { "$regex": request.query.name, "$options": "i" } : undefined,
+        brand: request.query.brand ? { "$regex": request.query.brand, "$options": "i" } : undefined,
+        subType: request.query.subType ? { "$regex": request.query.subType, "$options": "i" } : undefined
     };
+    Object.keys(filterData).forEach(key => filterData[key] === undefined && delete filterData[key]);
     db.find(db.COLLECTIONS.PRODUCTS, filterData).then((products) => {
         response.status(200).json(products);
     }).catch(() => {
