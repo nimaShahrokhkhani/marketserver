@@ -23,7 +23,7 @@ router.get('/search', function (request, response, next) {
         subType: request.query.subType ? { "$regex": request.query.subType, "$options": "i" } : undefined
     };
     Object.keys(filterData).forEach(key => filterData[key] === undefined && delete filterData[key]);
-    db.find(db.COLLECTIONS.PRODUCTS, filterData).then((products) => {
+    db.find(db.COLLECTIONS.PRODUCTS, filterData, request.query.offset, request.query.length).then((products) => {
         response.status(200).json(products);
     }).catch(() => {
         response.status(409).send("Product not found");
@@ -52,7 +52,7 @@ router.get('/list', function (request, response, next) {
         isBestSeller: request.query.isBestSeller
     };
     Object.keys(filterData).forEach(key => filterData[key] === undefined && delete filterData[key]);
-    db.find(db.COLLECTIONS.PRODUCTS, filterData).then((products) => {
+    db.find(db.COLLECTIONS.PRODUCTS, filterData, request.query.offset, request.query.length).then((products) => {
         response.status(200).json(products);
     }).catch(() => {
         response.status(409).send("Product not found");

@@ -16,14 +16,41 @@ MongoClient.connect(url, function (err, db) {
     dbo = db.db("marketplace");
 });
 
-function find(collection, query) {
+function find(collection, query, offset, length) {
     return new Promise((resolve, reject) => {
         if (dbo) {
             dbo.createCollection(collection, function (err, res) {
-                dbo.collection(collection).find(query).toArray(function (err, result) {
-                    if (err) reject(err);
-                    resolve(result);
-                });
+
+                if (offset && length) {
+                    dbo.collection(collection).aggregate([
+                        { "$facet": {
+                                "totalData": [
+                                    { "$match": query},
+                                    { "$skip": parseInt(offset) },
+                                    { "$limit": parseInt(length) }
+                                ],
+                                "totalCount": [
+                                    { "$group": {
+                                            "_id": null,
+                                            "count": { "$sum": 1 }
+                                        }}
+                                ]
+                            }}
+                    ]).toArray(function (err, result) {
+                        if (err) reject(err);
+                        let finalResult = {
+                            data: result[0].totalData,
+                            totalCount: result[0].totalCount[0].count
+                        };
+                        resolve(finalResult);
+                    })
+                } else {
+                    dbo.collection(collection).find(query).toArray(function (err, result) {
+                        if (err) reject(err);
+                        resolve(result);
+                    });
+                }
+
             });
         } else {
             reject();
