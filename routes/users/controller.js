@@ -1,6 +1,20 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../../helper/db');
+var multer = require('multer');
+var path = require('path');
+var mime = require('mime');
+var fs = require('fs');
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname, '/uploads/'));
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname)
+    }
+});
+var upload = multer({storage: storage});
 
 router.get('/list', function (request, response, next) {
     let filterData = {
@@ -22,7 +36,21 @@ router.get('/list', function (request, response, next) {
     });
 });
 
-router.post('/insert', function (request, response, next) {
+router.get('/download', function (req, res) {
+
+    var file = __dirname + '/uploads/' + req.query.fileName;
+
+    var filename = path.basename(file);
+    var mimetype = mime.lookup(file);
+
+    res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+    res.setHeader('Content-type', mimetype);
+
+    var filestream = fs.createReadStream(file);
+    filestream.pipe(res);
+});
+
+router.post('/insert', upload.single('file'), function (request, response, next) {
     let dataObject = {
         username: request.body.username,
         password: request.body.password,
@@ -41,19 +69,23 @@ router.post('/insert', function (request, response, next) {
     });
 });
 
-router.post('/edit', function (request, response, next) {
+router.post('/edit', upload.single('file'), function (request, response, next) {
     let query = {
         username: request.body.username
     };
+    let newValuesObject = {
+        password: request.body.password,
+        company: request.body.company,
+        role: request.body.role,
+        email: request.body.email,
+        phoneNumber: request.body.phoneNumber,
+        birthday: request.body.birthday,
+        address: request.body.address,
+        identityNumber: request.body.identityNumber
+    };
+    Object.keys(newValuesObject).forEach(key => newValuesObject[key] === undefined && delete newValuesObject[key]);
     let newValues = {
-        password: request.body.newValue.password,
-        company: request.body.newValue.company,
-        role: request.body.newValue.role,
-        email: request.body.newValue.email,
-        phoneNumber: request.body.newValue.phoneNumber,
-        birthday: request.body.newValue.birthday,
-        address: request.body.newValue.address,
-        identityNumber: request.body.newValue.identityNumber
+        $set: newValuesObject
     };
     db.update(db.COLLECTIONS.USERS, query, newValues).then((users) => {
         response.status(200).json(users);
