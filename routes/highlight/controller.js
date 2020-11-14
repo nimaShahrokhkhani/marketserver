@@ -19,6 +19,7 @@ var upload = multer({storage: storage});
 router.get('/list', function (request, response, next) {
     let filterData = {
         id: request.query.id,
+        title: request.query.title,
         contentImage: request.query.contentImage,
         products: request.query.products,
         summeryContent: request.query.summeryContent,
@@ -53,6 +54,7 @@ router.post('/uploadImage', upload.single('file'), function (request, response, 
 router.post('/insert', function (request, response, next) {
     let dataObject = {
         id: request.body.id,
+        title: request.body.title,
         contentImage: request.body.contentImage,
         products: request.body.products,
         content: request.body.content,
@@ -70,6 +72,7 @@ router.post('/edit', function (request, response, next) {
         id: request.body.id
     };
     let newValuesObject = {
+        title: request.body.title,
         contentImage: request.body.contentImage,
         products: request.body.products,
         summeryContent: request.body.summeryContent,
