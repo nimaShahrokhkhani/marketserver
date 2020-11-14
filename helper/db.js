@@ -8,7 +8,8 @@ const COLLECTIONS = {
     PRODUCTS: 'products',
     HIGHLIGHT: 'highlight',
     EVENTS: 'events',
-    BRANDS: 'brands'
+    BRANDS: 'brands',
+    BLOGS: 'blogs'
 };
 
 MongoClient.connect(url, function (err, db) {

@@ -21,5 +21,6 @@ router.use('/companies', require('./companies'));
 router.use('/highlight', require('./highlight'));
 router.use('/events', require('./events'));
 router.use('/brands', require('./brands'));
+router.use('/blogs', require('./blogs'));
 
 module.exports = router;
