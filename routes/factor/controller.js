@@ -4,7 +4,7 @@ var db = require('../../helper/db');
 
 router.get('/list', function(request, response, next) {
     let filterData = {
-        trackingCode: request.query.trackingCode,
+        factorNumber: request.query.factorNumber,
         username: request.query.username,
         phoneNumber: request.query.phoneNumber,
         address: request.query.address,
@@ -21,8 +21,8 @@ router.get('/list', function(request, response, next) {
         products: request.query.products,
     };
     Object.keys(filterData).forEach(key => filterData[key] === undefined && delete filterData[key]);
-    db.find(db.COLLECTIONS.FACTORS, {}).then((companies) => {
-        response.status(200).json(companies);
+    db.find(db.COLLECTIONS.FACTORS, {}).then((factors) => {
+        response.status(200).json(factors);
     }).catch(() => {
         response.status(409).send("Factor not found");
     });
@@ -30,7 +30,7 @@ router.get('/list', function(request, response, next) {
 
 router.post('/insert', function(request, response, next) {
     let dataObject = {
-        trackingCode: request.body.trackingCode,
+        factorNumber: request.body.factorNumber,
         username: request.body.username,
         phoneNumber: request.body.phoneNumber,
         address: request.body.address,
@@ -55,7 +55,7 @@ router.post('/insert', function(request, response, next) {
 
 router.post('/edit', function(request, response, next) {
     let query = {
-        trackingCode: request.body.trackingCode,
+        factorNumber: request.body.factorNumber,
     };
     let newValues = {
         username: request.body.username,
@@ -82,7 +82,7 @@ router.post('/edit', function(request, response, next) {
 
 router.post('/delete', function(request, response, next) {
     let query = {
-        trackingCode: request.body.trackingCode,
+        factorNumber: request.body.factorNumber,
     };
     db.deleteFunction(db.COLLECTIONS.FACTORS, query).then((factors) => {
         response.status(200).json(factors);
