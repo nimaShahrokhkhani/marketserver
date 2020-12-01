@@ -32,6 +32,7 @@ function find(collection, query, offset, length) {
                                     { "$limit": parseInt(length) }
                                 ],
                                 "totalCount": [
+                                    { "$match": query},
                                     { "$group": {
                                             "_id": null,
                                             "count": { "$sum": 1 }
@@ -42,7 +43,7 @@ function find(collection, query, offset, length) {
                         if (err) reject(err);
                         let finalResult = {
                             data: result[0].totalData,
-                            totalCount: result[0].totalCount[0].count
+                            totalCount: result[0].totalCount[0] ? result[0].totalCount[0].count : 0
                         };
                         resolve(finalResult);
                     })

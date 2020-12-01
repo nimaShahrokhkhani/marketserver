@@ -20,6 +20,7 @@ router.get('/search', function (request, response, next) {
     let filterData = {
         name: request.query.name ? { "$regex": request.query.name, "$options": "i" } : undefined,
         brand: request.query.brand ? { "$regex": request.query.brand, "$options": "i" } : undefined,
+        type: request.query.type ? { "$regex": request.query.type, "$options": "i" } : undefined,
         subType: request.query.subType ? { "$regex": request.query.subType, "$options": "i" } : undefined
     };
     Object.keys(filterData).forEach(key => filterData[key] === undefined && delete filterData[key]);
