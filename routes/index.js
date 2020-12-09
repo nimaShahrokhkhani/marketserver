@@ -15,6 +15,7 @@ router.use((request, response, next) => {
 router.use('/login', require('./login'));
 router.use('/register', require('./register'));
 router.use('/users', require('./users'));
+router.use('/masterCategory', require('./masterCategory'));
 router.use('/productCategory', require('./productCategory'));
 router.use('/products', require('./products'));
 router.use('/companies', require('./companies'));

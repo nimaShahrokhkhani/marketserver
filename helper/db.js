@@ -4,6 +4,7 @@ var dbo = undefined;
 const COLLECTIONS = {
     USERS: 'users',
     COMPANIES: 'companies',
+    MASTER_CATEGORIES: 'masterCategories',
     PRODUCT_CATEGORIES: 'productCategories',
     PRODUCTS: 'products',
     HIGHLIGHT: 'highlight',
