@@ -9,9 +9,12 @@ const COLLECTIONS = {
     PRODUCTS: 'products',
     HIGHLIGHT: 'highlight',
     EVENTS: 'events',
+    EVENT_TYPES: 'eventTypes',
     BRANDS: 'brands',
     BLOGS: 'blogs',
     FACTORS: 'factors',
+    BANNER_SLIDERS: 'bannerSliders',
+    SALE_SLIDERS: 'saleSliders',
 };
 
 MongoClient.connect(url, function (err, db) {
