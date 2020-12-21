@@ -20,6 +20,7 @@ router.get('/search', function (request, response, next) {
     let filterData = {
         name: request.query.name ? { "$regex": request.query.name, "$options": "i" } : undefined,
         brand: request.query.brand ? { "$regex": request.query.brand, "$options": "i" } : undefined,
+        masterCategory: request.query.masterCategory ? { "$regex": request.query.masterCategory, "$options": "i" } : undefined,
         type: request.query.type ? { "$regex": request.query.type, "$options": "i" } : undefined,
         subType: request.query.subType ? { "$regex": request.query.subType, "$options": "i" } : undefined
     };
@@ -40,6 +41,7 @@ router.get('/list', function (request, response, next) {
         image: request.query.image,
         price: request.query.price,
         discount: request.query.discount,
+        masterCategory: request.query.masterCategory,
         type: request.query.type,
         subType: request.query.subType,
         dateModify: request.query.dateModify,
@@ -69,6 +71,7 @@ router.get('/newCollection', function (request, response, next) {
         image: request.query.image,
         price: request.query.price,
         discount: request.query.discount,
+        masterCategory: request.query.masterCategory,
         type: request.query.type,
         subType: request.query.subType,
         dateModify: request.query.dateModify,
@@ -113,6 +116,7 @@ router.post('/insert', upload.single('file'), function (request, response, next)
         image: request.body.image,
         price: request.body.price,
         discount: request.body.discount,
+        masterCategory: request.body.masterCategory,
         type: request.body.type,
         subType: request.body.subType,
         dateModify: request.body.dateModify,
@@ -144,6 +148,7 @@ router.post('/edit', upload.single('file'), function (request, response, next) {
         description: request.body.description,
         price: request.body.price,
         discount: request.body.discount,
+        masterCategory: request.body.masterCategory,
         type: request.body.type,
         subType: request.body.subType,
         dateModify: request.body.dateModify,
